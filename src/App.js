@@ -1,25 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './Assets/css/style.css'
 import Header from "./Components/Header";
 import MainContent from "./Components/MainContent";
 import NumResults from "./Components/NumResults";
 import Search from "./Components/Search";
-const tempMovieData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0133093",
-    Title: "The Matrix",
-    Year: "1999",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-  }
-];
+import Box from "./Components/Box";
+import MovieList from "./Components/MovieList";
+import WatchedSummary from "./Components/WatchedSummary";
+import WatchedList from "./Components/WatchedList";
+import Loader from "./Components/Loader";
+
+const KEY = process.env.REACT_APP_OMDB_API_KEY;
+
 
 const tempWatchedData = [
   {
@@ -45,8 +37,25 @@ const tempWatchedData = [
 ];
 
 export default function App() {
-  const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState(tempMovieData);
+  const [query, setQuery] = useState("interstellar");
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState(tempWatchedData);
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(
+    function () {
+      async function getMovieDetails() {
+        try {
+          setIsLoading(true)
+          const res = await fetch(`http://www.omdbapi.com/?s=${query}&apikey=${KEY}`);
+          const data = await res.json()
+          setIsLoading(false)
+          setMovies(data.Search)
+        }
+        catch { }
+      }
+      getMovieDetails()
+    }, [query])
 
   return (
     <>
@@ -54,7 +63,18 @@ export default function App() {
         <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </Header>
-      <MainContent tempWatchedData={tempWatchedData} movies={movies} />
+      
+      <MainContent>
+        <Box>
+          {isLoading && <Loader />}
+          <MovieList movies={movies} />
+        </Box>
+
+        <Box>
+          <WatchedSummary watched={watched} />
+          <WatchedList watched={watched} />
+        </Box>
+      </MainContent>
     </>
   );
 }
