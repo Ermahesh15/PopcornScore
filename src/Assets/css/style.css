@@ -24,7 +24,26 @@ body {
   font-family: "Roboto", serif;
   color: var(--color-text);
   background-color: var(--color-background-900);
-  padding: 2.4rem;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.10);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.24);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.34);
 }
 
 /* ******* */
@@ -36,7 +55,6 @@ body {
   height: 7.2rem;
   padding: 0 3.2rem;
   background-color: var(--color-primary);
-  border-radius: 0.9rem;
 }
 
 .main {
@@ -52,7 +70,7 @@ body {
   max-width: 42rem;
   background-color: var(--color-background-500);
   border-radius: 0.9rem;
-  overflow: scroll;
+  overflow: auto;
   position: relative;
 }
 
@@ -136,7 +154,7 @@ body {
 .list {
   list-style: none;
   padding: 0.8rem 0;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .list-watched {
