@@ -2,6 +2,8 @@ import { useState } from "react";
 import './Assets/css/style.css'
 import Header from "./Components/Header";
 import MainContent from "./Components/MainContent";
+import NumResults from "./Components/NumResults";
+import Search from "./Components/Search";
 const tempMovieData = [
   {
     imdbID: "tt1375666",
@@ -48,7 +50,10 @@ export default function App() {
 
   return (
     <>
-      <Header movies={movies} query={query} setQuery={setQuery} />
+      <Header>
+        <Search query={query} setQuery={setQuery} />
+        <NumResults movies={movies} />
+      </Header>
       <MainContent tempWatchedData={tempWatchedData} movies={movies} />
     </>
   );
