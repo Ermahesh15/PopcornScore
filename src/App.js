@@ -16,14 +16,7 @@ const tempMovieData = [
     Year: "1999",
     Poster:
       "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt6751668",
-    Title: "Parasite",
-    Year: "2019",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-  },
+  }
 ];
 
 const tempWatchedData = [
@@ -49,8 +42,6 @@ const tempWatchedData = [
   },
 ];
 
-
-
 export default function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState(tempMovieData);
@@ -59,7 +50,6 @@ export default function App() {
     <>
       <Header movies={movies} query={query} setQuery={setQuery} />
       <MainContent tempWatchedData={tempWatchedData} movies={movies} />
-
     </>
   );
 }
