@@ -9,9 +9,9 @@ import MovieList from "./Components/MovieList";
 import WatchedSummary from "./Components/WatchedSummary";
 import WatchedList from "./Components/WatchedList";
 import Loader from "./Components/Loader";
+import ErrorMessage from "./Components/ErrorMessage";
 
 const KEY = process.env.REACT_APP_OMDB_API_KEY;
-
 
 const tempWatchedData = [
   {
@@ -41,18 +41,25 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("");
 
   useEffect(
     function () {
       async function getMovieDetails() {
         try {
           setIsLoading(true)
+          setError("");
           const res = await fetch(`http://www.omdbapi.com/?s=${query}&apikey=${KEY}`);
+          if (!res.ok) throw new Error('Something went wrong')
+
           const data = await res.json()
+          if (data.Response === 'False') throw new Error('Movie not found!')
           setIsLoading(false)
           setMovies(data.Search)
         }
-        catch { }
+        catch (err) {
+          setError(err)
+        }
       }
       getMovieDetails()
     }, [query])
@@ -63,11 +70,14 @@ export default function App() {
         <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </Header>
-      
+
+
       <MainContent>
+
         <Box>
           {isLoading && <Loader />}
-          <MovieList movies={movies} />
+          {error && <ErrorMessage message={error} />}
+          {!isLoading && !error && <MovieList movies={movies} />}
         </Box>
 
         <Box>
