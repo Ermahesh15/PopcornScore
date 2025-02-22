@@ -10,6 +10,7 @@ import WatchedSummary from "./Components/WatchedSummary";
 import WatchedList from "./Components/WatchedList";
 import Loader from "./Components/Loader";
 import ErrorMessage from "./Components/ErrorMessage";
+import MovieDetails from "./Components/MovieDetails";
 
 const KEY = process.env.REACT_APP_OMDB_API_KEY;
 
@@ -42,13 +43,14 @@ export default function App() {
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(
     function () {
       async function getMovieDetails() {
         try {
           setIsLoading(true)
-          setError("");
+          setError('')  // Reset error before new request
           const res = await fetch(`http://www.omdbapi.com/?s=${query}&apikey=${KEY}`);
           if (!res.ok) throw new Error('Something went wrong')
 
@@ -58,11 +60,23 @@ export default function App() {
           setMovies(data.Search)
         }
         catch (err) {
-          setError(err)
+          setError(err.message)
+        }
+        finally {
+          setIsLoading(false); // Ensures loading stops even if error occurs
         }
       }
       getMovieDetails()
     }, [query])
+
+
+  function onCloseMovie() {
+    setSelectedId(null)
+  }
+
+  function handleSelectMovie(id) {
+    setSelectedId(id)
+  }
 
   return (
     <>
@@ -77,13 +91,16 @@ export default function App() {
         <Box>
           {isLoading && <Loader />}
           {error && <ErrorMessage message={error} />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && <MovieList movies={movies} onSelectMovie={handleSelectMovie} />}
         </Box>
 
         <Box>
-          <WatchedSummary watched={watched} />
-          <WatchedList watched={watched} />
+          {selectedId ? <MovieDetails onCloseMovie={onCloseMovie} selectedId={selectedId} /> : <>
+            <WatchedSummary watched={watched} />
+            <WatchedList watched={watched} />
+          </>}
         </Box>
+
       </MainContent>
     </>
   );
