@@ -23,29 +23,37 @@ export default function App() {
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
-  useEffect(
-    function () {
-      async function getMovieDetails() {
-        try {
-          setIsLoading(true)
-          setError('')  // Reset error before new request
-          const res = await fetch(`http://www.omdbapi.com/?s=${query}&apikey=${KEY}`);
-          if (!res.ok) throw new Error('Something went wrong')
+  useEffect(() => {
+    if (!query) return; // Prevents API call when query is empty
+    const controller = new AbortController();
+    async function getMovieDetails() {
+      try {
+        setIsLoading(true);
+        setError(""); // Reset error before new request
 
-          const data = await res.json()
-          if (data.Response === 'False') throw new Error('Movie not found!')
-          setIsLoading(false)
-          setMovies(data.Search)
+        const res = await fetch(`http://www.omdbapi.com/?s=${query}&apikey=${KEY}`, { signal: controller.signal });
+
+        if (!res.ok) throw new Error("Something went wrong");
+
+        const data = await res.json();
+        if (data.Response === "False") throw new Error("Movie not found!");
+
+        setMovies(data.Search);
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          setError(err.message);
         }
-        catch (err) {
-          setError(err.message)
-        }
-        finally {
-          setIsLoading(false); // Ensures loading stops even if error occurs
-        }
+      } finally {
+        setIsLoading(false); // Ensures loading stops even if an error occurs
       }
-      getMovieDetails()
-    }, [query])
+    }
+
+    getMovieDetails();
+
+    return () => controller.abort(); // Cleanup function to cancel fetch if query changes
+
+  }, [query]); // Effect runs when `query` changes
+
 
 
   function onCloseMovie() {

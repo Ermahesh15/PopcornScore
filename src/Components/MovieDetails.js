@@ -45,7 +45,10 @@ export default function MovieDetails({ onCloseMovie, selectedId, handleAddWacthe
 
     useEffect(function () {
         if(!title) return;
-        document.title = `Movie | ${title}`
+        document.title = `Movie | ${title}`;
+        return function(){
+             document.title = "Popcorn Score"
+        }
     }, [title])
 
     function handleAdd() {
