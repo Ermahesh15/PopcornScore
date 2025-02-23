@@ -44,12 +44,25 @@ export default function MovieDetails({ onCloseMovie, selectedId, handleAddWacthe
     )
 
     useEffect(function () {
-        if(!title) return;
+        if (!title) return;
         document.title = `Movie | ${title}`;
-        return function(){
-             document.title = "Popcorn Score"
+        return function () {
+            document.title = "Popcorn Score"
         }
     }, [title])
+
+    useEffect(function () {
+        function escapeCall(e) {
+            if (e.code === 'Escape') {
+                onCloseMovie()
+            }
+        }
+        document.addEventListener('keydown', escapeCall)
+
+        return function () {
+            document.removeEventListener('keydown', escapeCall)
+        }
+    }, [onCloseMovie])
 
     function handleAdd() {
         const newWatchedMovie = {

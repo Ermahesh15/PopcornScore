@@ -48,6 +48,7 @@ export default function App() {
       }
     }
 
+    handleCloseMovie()
     getMovieDetails();
 
     return () => controller.abort(); // Cleanup function to cancel fetch if query changes
@@ -56,7 +57,9 @@ export default function App() {
 
 
 
-  function onCloseMovie() {
+
+
+  function handleCloseMovie() {
     setSelectedId(null)
   }
 
@@ -91,7 +94,7 @@ export default function App() {
         <Box>
           {selectedId ?
             <MovieDetails
-              onCloseMovie={onCloseMovie}
+              onCloseMovie={handleCloseMovie}
               selectedId={selectedId}
               handleAddWacthed={handleAddWacthed}
               watched={watched}
