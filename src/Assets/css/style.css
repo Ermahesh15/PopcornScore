@@ -26,6 +26,10 @@ body {
   background-color: var(--color-background-900);
 }
 
+.text-center {
+  text-align: center;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 7px;

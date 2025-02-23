@@ -10,7 +10,6 @@ export default function MovieDetails({ onCloseMovie, selectedId, handleAddWacthe
     const countRef = useRef(0);
 
     const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
-    console.log(isWatched)
     const watchedUserRating = watched.find(
         (movie) => movie.imdbID === selectedId
     )?.userRating;
