@@ -14,33 +14,11 @@ import MovieDetails from "./Components/MovieDetails";
 
 const KEY = process.env.REACT_APP_OMDB_API_KEY;
 
-const tempWatchedData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-    runtime: 148,
-    imdbRating: 8.8,
-    userRating: 10,
-  },
-  {
-    imdbID: "tt0088763",
-    Title: "Back to the Future",
-    Year: "1985",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
-    runtime: 116,
-    imdbRating: 8.5,
-    userRating: 9,
-  },
-];
 
 export default function App() {
   const [query, setQuery] = useState("interstellar");
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
@@ -75,7 +53,11 @@ export default function App() {
   }
 
   function handleSelectMovie(id) {
-    setSelectedId(id)
+    setSelectedId((selectedId) => (id === selectedId ? null : id));
+  }
+
+  function handleAddWacthed(item) {
+    setWatched([...watched, item])
   }
 
   return (
@@ -95,10 +77,16 @@ export default function App() {
         </Box>
 
         <Box>
-          {selectedId ? <MovieDetails onCloseMovie={onCloseMovie} selectedId={selectedId} /> : <>
-            <WatchedSummary watched={watched} />
-            <WatchedList watched={watched} />
-          </>}
+          {selectedId ?
+            <MovieDetails
+              onCloseMovie={onCloseMovie}
+              selectedId={selectedId}
+              handleAddWacthed={handleAddWacthed}
+              watched={watched}
+            /> : <>
+              <WatchedSummary watched={watched} />
+              <WatchedList watched={watched} />
+            </>}
         </Box>
 
       </MainContent>
