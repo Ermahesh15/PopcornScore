@@ -15,17 +15,7 @@ export default function MovieDetails({ onCloseMovie, selectedId, handleAddWacthe
     )?.userRating;
 
 
-    useEffect(
-        function () {
-            async function getMovieDetails() {
-                setIsLoading(true)
-                const res = await fetch(`http://www.omdbapi.com/?i=${selectedId}&apikey=${KEY}`);
-                const data = await res.json()
-                setIsLoading(false)
-                setMovie(data)
-            }
-            getMovieDetails()
-        }, [selectedId])
+
 
     const {
         Title: title,
@@ -39,6 +29,24 @@ export default function MovieDetails({ onCloseMovie, selectedId, handleAddWacthe
         Director: director,
         Genre: genre,
     } = movie;
+
+    useEffect(
+        function () {
+            async function getMovieDetails() {
+                setIsLoading(true)
+                const res = await fetch(`http://www.omdbapi.com/?i=${selectedId}&apikey=${KEY}`);
+                const data = await res.json()
+                setIsLoading(false)
+                setMovie(data)
+            }
+            getMovieDetails()
+        }, [selectedId]
+    )
+
+    useEffect(function () {
+        if(!title) return;
+        document.title = `Movie | ${title}`
+    }, [title])
 
     function handleAdd() {
         const newWatchedMovie = {

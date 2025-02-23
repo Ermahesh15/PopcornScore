@@ -16,7 +16,7 @@ const KEY = process.env.REACT_APP_OMDB_API_KEY;
 
 
 export default function App() {
-  const [query, setQuery] = useState("interstellar");
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
