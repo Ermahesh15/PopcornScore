@@ -18,10 +18,41 @@ const KEY = process.env.REACT_APP_OMDB_API_KEY;
 export default function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+  //const [watched, setWatched] = useState([]);
+
+  const [watched, setWatched] = useState(function () {
+    const storedData = localStorage.getItem('watched')
+    return JSON.parse(storedData)
+  });
+
+  function handleCloseMovie() {
+    setSelectedId(null)
+  }
+
+  function handleSelectMovie(id) {
+    setSelectedId((selectedId) => (id === selectedId ? null : id));
+  }
+
+  function handleDeleteWatched(id) {
+    setWatched(watched.filter((movie) => movie.imdbID !== id && [...watched, movie]))
+  }
+
+  // function handleAddWacthed(item) {
+  //   setWatched([...watched, item])
+  //   localStorage.setItem('watched', JSON.stringify([...watched, item]))
+  // }
+
+  function handleAddWacthed(item) {
+    setWatched([...watched, item])
+  }
+
+  useEffect(function () {
+    localStorage.setItem('watched', JSON.stringify(watched))
+  }, [watched])
 
   useEffect(() => {
     if (!query) return; // Prevents API call when query is empty
@@ -54,26 +85,6 @@ export default function App() {
     return () => controller.abort(); // Cleanup function to cancel fetch if query changes
 
   }, [query]); // Effect runs when `query` changes
-
-
-
-
-
-  function handleCloseMovie() {
-    setSelectedId(null)
-  }
-
-  function handleSelectMovie(id) {
-    setSelectedId((selectedId) => (id === selectedId ? null : id));
-  }
-
-  function handleAddWacthed(item) {
-    setWatched([...watched, item])
-  }
-
-  function handleDeleteWatched(id) {
-    setWatched(watched.filter((movie) => movie.imdbID !== id && [...watched, movie]))
-  }
 
   return (
     <>
