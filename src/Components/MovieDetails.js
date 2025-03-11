@@ -9,13 +9,17 @@ export default function MovieDetails({ onCloseMovie, selectedId, handleAddWacthe
     const [userRating, setUserRating] = useState('')
     const countRef = useRef(0);
 
+    useEffect(
+        function () {
+            if (userRating) countRef.current = countRef.current + 1;
+        },
+        [userRating]
+    );
+
     const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
     const watchedUserRating = watched.find(
         (movie) => movie.imdbID === selectedId
     )?.userRating;
-
-
-
 
     const {
         Title: title,
@@ -63,6 +67,8 @@ export default function MovieDetails({ onCloseMovie, selectedId, handleAddWacthe
             document.removeEventListener('keydown', escapeCall)
         }
     }, [onCloseMovie])
+
+
 
     function handleAdd() {
         const newWatchedMovie = {
