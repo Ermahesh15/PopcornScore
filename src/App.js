@@ -19,7 +19,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
 
   const { movies, isLoading, error } = useMovies(query, handleCloseMovie)
-  const { watched, setWatched } = useLocalStorage([])
+  const [watched, setWatched] = useLocalStorage([], "watched")
 
   function handleCloseMovie() {
     setSelectedId(null)
@@ -33,18 +33,9 @@ export default function App() {
     setWatched(watched.filter((movie) => movie.imdbID !== id && [...watched, movie]))
   }
 
-  // function handleAddWacthed(item) {
-  //   setWatched([...watched, item])
-  //   localStorage.setItem('watched', JSON.stringify([...watched, item]))
-  // }
-
   function handleAddWacthed(item) {
     setWatched([...watched, item])
   }
-
-
-
-
 
   return (
     <>
